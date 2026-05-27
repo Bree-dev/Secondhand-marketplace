@@ -26,15 +26,8 @@
             </div>
             
             <!-- Desktop Action Controls (Hidden on small mobile viewports) -->
-            <div class="flex items-center space-x-4 md:space-x-6 font-medium text-xs md:text-sm">
-                <a href="#" class="hidden sm:inline-block text-gray-600 hover:text-emerald-600">Browse</a>
-                <button class="bg-emerald-600 text-white px-3 py-1.5 md:px-4 md:py-2 font-semibold hover:bg-emerald-700 transition sharp-card">Post Item</button>
-                <a href="#" class="text-gray-600 hover:text-emerald-600">Account</a>
-                <a href="#" class="hidden md:flex text-gray-500 hover:text-gray-700 items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-                    Admin
-                </a>
-            </div>
+            <div id="navActions" class="flex items-center space-x-4 md:space-x-6 font-medium text-xs md:text-sm">
+    </div>
         </div>
     </header>
 
@@ -66,99 +59,34 @@
     </main>
 
     <!-- JavaScript Data Logic Model -->
+     <script src="js/config.js"></script>
+     <script src="js/app.js"></script>
+
+
     <script>
-        const sampleItems = [
-            { id: 1, title: "Solid Wood Coffee Table", category: "Furniture", price: "KSh 4,500", condition: "Gently Used", location: "Nairobi CBD", whatsapp: "254700000000", time: "2m ago", img: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=500&q=80" },
-            { id: 2, title: "Samsung Galaxy S22", category: "Electronics", price: "KSh 55,000", condition: "New", location: "Westlands, Nairobi", whatsapp: "254700000000", time: "2m ago", img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=500&q=80" },
-            { id: 3, title: "Vintage Sofa Set", category: "Furniture", price: "KSh 32,000", condition: "Gently Used", location: "Nakuru", whatsapp: "254700000000", time: "5m ago", img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=500&q=80" },
-            { id: 4, title: "Kenwood Blender", category: "Kitchenware", price: "KSh 3,800", condition: "Well Loved", location: "Kisumu", whatsapp: "254700000000", time: "15m ago", img: "https://images.unsplash.com/photo-1570222081313-4923ef7f724e?auto=format&fit=crop&w=500&q=80" },
-            { id: 5, title: "Brand New Sofa", category: "Furniture", price: "KSh 28,000", condition: "New", location: "Nairobi", whatsapp: "254700000000", time: "5m ago", img: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=500&q=80" },
-            { id: 6, title: "Kenwood Stand Mixer", category: "Kitchenware", price: "KSh 12,000", condition: "Gently Used", location: "Nakuru", whatsapp: "254700000000", time: "5m ago", img: "https://images.unsplash.com/photo-1588854337236-6889d631faa8?auto=format&fit=crop&w=500&q=80" },
-            { id: 7, title: "Ergonomic Desk Chair", category: "Furniture", price: "KSh 8,500", condition: "Like New", location: "Eldoret", whatsapp: "254700000000", time: "15m ago", img: "https://images.unsplash.com/photo-1505797149-43b0069ec26b?auto=format&fit=crop&w=500&q=80" }
-        ];
-
-        let currentCategory = "All";
-
-        function renderGrid(itemsToDisplay) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
-
-            if(itemsToDisplay.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 text-sm">No items match your search details.</div>`;
-                return;
-            }
-
-            itemsToDisplay.forEach(item => {
-                const message = encodeURIComponent(`Hi, I'm interested in your "${item.title}" listed for ${item.price}. Is it still available?`);
-                const waLink = `https://wa.me/${item.whatsapp}?text=${message}`;
-
-                // Structured Layout Block: Content block is positioned safely strictly below the image card boundary
-                const cardHtml = `
-                    <div class="bg-white border border-gray-200 sharp-card flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition">
-                        <!-- Top Half Image Window -->
-                        <div class="relative aspect-[4/3] w-full bg-gray-100">
-                            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
-                        </div>
-
-                        <!-- Lower Half Information & Call to Actions -->
-                        <div class="p-4 flex flex-col flex-grow justify-between bg-white">
-                            <div class="mb-3">
-                                <div class="text-lg md:text-xl font-bold text-gray-900 mb-0.5">${item.price}</div>
-                                <h3 class="text-xs md:text-sm font-semibold text-gray-700 line-clamp-1 mb-2.5">${item.title}</h3>
-                                
-                                <div class="space-y-1 text-[11px] md:text-xs text-gray-600">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-400">Condition:</span>
-                                        <span class="font-medium text-gray-700">${item.condition}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-400">Location:</span>
-                                        <span class="font-medium text-gray-700">${item.location}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <a href="${waLink}" target="_blank" 
-                                   class="w-full bg-emerald-600 text-white font-bold py-2.5 px-4 text-[11px] tracking-wider uppercase text-center flex items-center justify-center gap-2 hover:bg-emerald-700 transition sharp-card">
-                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.93 0c3.165.001 6.14 1.233 8.377 3.469 2.237 2.235 3.469 5.211 3.469 8.378 0 6.582-5.336 11.93-11.87 11.93h-.004c-2.002-.001-3.973-.541-5.733-1.565L0 24zm6.59-4.846c1.656.983 3.511 1.502 5.39 1.503h.005c5.514 0 10.002-4.49 10.002-10.008 0-2.673-1.04-5.184-2.93-7.076C17.165 1.68 14.653.641 11.93.641c-5.515 0-10.003 4.49-10.003 10.007 0 1.95.503 3.852 1.46 5.518l-.993 3.633 3.715-.975zm11.234-7.25c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.174.2-.298.3-.496.1-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
-                                    Chat on WhatsApp
-                                </a>
-                                <div class="text-[10px] text-right text-gray-400 mt-1.5">Posted ${item.time}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.innerHTML += cardHtml;
-            });
-        }
-
+// Wire up the clean UI event controls directly to your modern js/app.js file functions
         function filterItems() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = sampleItems.filter(item => {
-                const matchesSearch = item.title.toLowerCase().includes(query) || item.location.toLowerCase().includes(query);
-                const matchesCategory = currentCategory === "All" || item.category === currentCategory;
-                return matchesSearch && matchesCategory;
-            });
-            renderGrid(filtered);
+            const input = document.getElementById('searchInput');
+            searchQuery = input.value.trim();
+            fetchMarketplaceItems(); // Triggers live Postgres SQL text query match
         }
 
         function filterCategory(category) {
             currentCategory = category;
             
+            // Toggle visual styling states on buttons
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.classList.remove('bg-gray-900', 'text-white');
-                btn.classList.add('bg-white', 'text-gray-700');
+                btn.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
             });
             
+            // Highlight the selected filter choice block
             const activeBtn = event.currentTarget;
-            activeBtn.classList.remove('bg-white', 'text-gray-700');
+            activeBtn.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
             activeBtn.classList.add('bg-gray-900', 'text-white');
 
-            filterItems();
+            fetchMarketplaceItems(); // Requests filtered rows from Postgres API
         }
-
-        renderGrid(sampleItems);
     </script>
 </body>
 </html>

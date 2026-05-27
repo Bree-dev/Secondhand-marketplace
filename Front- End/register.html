@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Second-Hand Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white p-8 border border-gray-200 shadow-sm max-w-md w-full">
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-6 text-center">Create Seller Account</h2>
+        
+        <form id="registerForm" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Full Name</label>
+                <input type="text" id="regName" required class="w-full border border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-900">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Email Address</label>
+                <input type="email" id="regEmail" required class="w-full border border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-900">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">WhatsApp Number (e.g., 254712345678)</label>
+                <input type="text" id="regWhatsApp" required class="w-full border border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-900">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Password</label>
+                <input type="password" id="regPassword" required class="w-full border border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-900">
+            </div>
+            
+            <button type="submit" class="w-full bg-gray-900 text-white font-bold py-2.5 text-xs uppercase tracking-wider hover:bg-gray-800 transition">
+                Sign Up
+            </button>
+        </form>
+        
+        <p class="text-xs text-center text-gray-500 mt-4">
+            Already have an account? <a href="login.html" class="text-gray-900 font-bold underline">Login here</a>
+        </p>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

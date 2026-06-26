@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard | RE-MARKET Kenya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sharp-card { border-radius: 0px !important; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-black tracking-tight text-gray-900">
+                RE-MARKET <span class="text-emerald-600 font-medium text-xs tracking-normal">Kenya</span>
+            </a>
+            <div class="flex items-center space-x-4 font-medium text-xs md:text-sm">
+                <a href="index.html" class="text-gray-600 hover:text-emerald-600">Back to Market</a>
+                <a href="upload.html" class="bg-emerald-600 text-white px-3 py-1.5 font-semibold hover:bg-emerald-700 transition sharp-card">Post Item</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl w-full mx-auto p-4 flex-grow">
+        <div class="border-b border-gray-200 pb-4 mb-6">
+            <h1 class="text-2xl font-black text-gray-900">Your Seller Workspace</h1>
+            <p class="text-xs text-gray-500 mt-1">Manage, review, and delete your active listings across the platform.</p>
+        </div>
+
+        <div id="dashboardGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 py-4 text-center text-xs text-gray-400 font-medium">
+        &copy; 2026 RE-MARKET Kenya. Internal Seller Portal.
+    </footer>
+
+    <script>
+        // Adjust port mapping if your environment variable targets another route anchor
+        const API_BASE_URL = 'http://localhost:5000/api'; 
+    </script>
+    <script src="js/dashboard.js"></script>
+
+    <div id="editModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 animate-fade-in">
+        <div class="bg-white border border-gray-300 w-full max-w-md p-6 shadow-xl sharp-card">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+                <h2 class="text-base font-black text-gray-900 tracking-tight uppercase">Edit Listing Details ✏️</h2>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+            </div>
+
+            <form id="editForm" onsubmit="handleEditFormSubmit(event)">
+                <input type="hidden" id="editItemId">
+                
+                <div class="mb-3">
+                    <label class="block text-gray-700 font-bold text-[11px] uppercase mb-1">Product Title</label>
+                    <input type="text" id="editTitle" required class="w-full border border-gray-300 p-2 text-xs sharp-card focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-gray-700 font-bold text-[11px] uppercase mb-1">Price (KSh)</label>
+                        <input type="number" id="editPrice" required class="w-full border border-gray-300 p-2 text-xs sharp-card focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold text-[11px] uppercase mb-1">Category</label>
+                        <select id="editCategory" required class="w-full border border-gray-300 p-2 bg-white text-xs sharp-card focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                            <option value="Electronics">Electronics</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Kitchenware">Kitchenware</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div>
+                        <label class="block text-gray-700 font-bold text-[11px] uppercase mb-1">Condition</label>
+                        <select id="editCondition" required class="w-full border border-gray-300 p-2 bg-white text-xs sharp-card focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                            <option value="BRAND NEW">BRAND NEW</option>
+                            <option value="LIKE NEW">LIKE NEW</option>
+                            <option value="GENTLY USED">GENTLY USED</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold text-[11px] uppercase mb-1">Location</label>
+                        <input type="text" id="editLocation" required class="w-full border border-gray-300 p-2 text-xs sharp-card focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-bold text-[11px] uppercase mb-1">Update Product Photo 📷 (Optional)</label>
+                    <input type="file" id="editImageFile" accept="image/*" 
+                           class="w-full border border-gray-300 p-2 text-xs bg-white sharp-card focus:ring-1 focus:ring-emerald-500 focus:outline-none file:mr-3 file:py-1 file:px-2 file:border-0 file:text-[10px] file:font-bold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
+                    <p class="text-[9px] text-gray-400 mt-1">Leave empty if you don't want to change the current photo.</p>
+                </div>
+
+                <div class="flex space-x-2">
+                    <button type="button" onclick="closeEditModal()" class="w-1/3 border border-gray-200 text-gray-500 font-bold py-2.5 text-xs uppercase tracking-wider hover:bg-gray-50 transition text-center sharp-card">
+                        Cancel
+                    </button>
+                    <button type="submit" class="w-2/3 bg-emerald-600 text-white font-bold py-2.5 text-xs uppercase tracking-wider hover:bg-emerald-700 transition text-center sharp-card shadow-sm">
+                        Save Changes 💾
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

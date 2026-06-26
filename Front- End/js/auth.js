@@ -47,8 +47,14 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            alert("Welcome back! Redirecting to marketplace...");
-            window.location.href = 'index.html';
+            //  Dynamic Routing based on user privilege role
+            if (data.user && data.user.role === 'admin') {
+                alert(`Welcome back, Admin ${data.user.name}! Opening Moderation Panel...`);
+                window.location.href = 'admin.html';
+            } else {
+                alert("Welcome back! Redirecting to marketplace...");
+                window.location.href = 'index.html';
+            }
         } else {
             alert(data.message || "Login credentials invalid.");
         }

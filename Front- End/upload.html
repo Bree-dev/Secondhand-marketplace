@@ -47,6 +47,7 @@
                     <select id="itemCategory" class="w-full border border-gray-300 p-2.5 text-sm bg-white focus:outline-none focus:border-gray-900">
                         <option value="Electronics">Electronics</option>
                         <option value="Furniture">Furniture</option>
+                        <option value="Kitchenware">Kitchenware</option>
                         <option value="Clothing">Clothing</option>
                         <option value="Vehicles">Vehicles</option>
                         <option value="Books & Hobbies">Books & Hobbies</option>
@@ -58,17 +59,17 @@
                     <select id="itemCondition" class="w-full border border-gray-300 p-2.5 text-sm bg-white focus:outline-none focus:border-gray-900">
                         <option value="Brand New">Brand New</option>
                         <option value="Like New">Like New</option>
-                        <option value="Gently Used">Gently Used</option>
-                        <option value="Well Used">Well Used</option>
+                        <option value="">Gently Used</option>
+                        <option value="SecondHand">SecondHand</option>
                     </select>
                 </div>
             </div>
 
             <div>
-                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Image URL</label>
-                <input type="url" id="itemImageUrl" placeholder="https://example.com/your-image.jpg" 
-                       class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-gray-900">
-                <p class="text-[10px] text-gray-400 mt-1">Paste a web link to a picture of your item.</p>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Upload Product Photo 📷</label>
+                <input type="file" id="imageFile" accept="image/*" required 
+                       class="w-full border border-gray-300 p-2 text-sm bg-white focus:outline-none focus:border-gray-900 file:mr-4 file:py-1.5 file:px-3 file:border-0 file:text-xs file:font-bold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
+                <p class="text-[10px] text-gray-400 mt-1">Select an actual photo file directly from your computer or device.</p>
             </div>
 
             <div>

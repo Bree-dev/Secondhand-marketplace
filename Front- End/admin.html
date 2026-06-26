@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Moderation Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans p-6">
+
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+            <div>
+                <h1 class="text-2xl font-black tracking-tight text-gray-900 uppercase">Marketplace Moderation</h1>
+                <p class="text-xs text-gray-500">Monitor registered sellers and remove inappropriate listings.</p>
+            </div>
+            <a href="index.html" class="text-xs bg-gray-900 text-white px-3 py-2 font-bold uppercase tracking-wider hover:bg-gray-800">
+                ← Main Feed
+            </a>
+        </div>
+
+        <div id="usersContainer" class="space-y-6"></div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+
+        async function fetchDashboardData() {
+            const token = localStorage.getItem('token');
+            const container = document.getElementById('usersContainer');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/items/admin/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    container.innerHTML = `<p class="text-red-500 text-sm font-semibold">Failed to load dashboard: ${response.statusText}</p>`;
+                    return;
+                }
+
+                const data = await response.json();
+                renderDashboard(data.users);
+            } catch (err) {
+                container.innerHTML = `<p class="text-red-500 text-sm">Error connecting to server.</p>`;
+            }
+        }
+
+        function renderDashboard(users) {
+            const container = document.getElementById('usersContainer');
+            container.innerHTML = '';
+
+            if (users.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500">No registered users found.</p>`;
+                return;
+            }
+
+            users.forEach(user => {
+                let itemsHTML = '';
+
+                if (user.items.length === 0) {
+                    itemsHTML = `<p class="text-xs text-gray-400 italic p-3 bg-gray-50 border border-dashed border-gray-200">This user hasn't listed any items yet.</p>`;
+                // ... inside your renderDashboard function, replace the old 'else' block with this:
+} else {
+    itemsHTML = `
+        <div class="space-y-4 p-4 bg-gray-50 border border-gray-200">
+            ${user.items.map(item => {
+                let imageSrc = 'https://placehold.co/100x100?text=No+Image';
+                
+                if (item.image) {
+                    if (item.image.startsWith('http://') || item.image.startsWith('https://')) {
+                        imageSrc = item.image;
+                    } else {
+                        const assetBaseUrl = API_BASE_URL.replace('/api', '');
+                        imageSrc = `${assetBaseUrl}/${item.image}`;
+                    }
+                }
+
+                return `
+                    <div class="flex items-center justify-between bg-white p-4 border border-gray-200 shadow-sm rounded-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-5">
+                            <img src="${imageSrc}" 
+                                 onerror="this.src='https://placehold.co/150x150?text=No+Image';" 
+                                 class="w-24 h-24 object-cover border border-gray-200 shadow-inner rounded">
+                            <div>
+                                <h4 class="text-base font-black text-gray-800 tracking-tight">${item.title}</h4>
+                                <p class="text-sm text-emerald-600 font-bold mt-1">Ksh ${Number(item.price).toLocaleString()}</p>
+                                <p class="text-[11px] text-gray-400 mt-0.5">Item ID: #${item.id}</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteListing(${item.id})" class="text-xs bg-red-600 hover:bg-red-700 text-white font-black px-4 py-2 uppercase tracking-wider transition-colors duration-150">
+                            Delete Item
+                        </button>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+}
+            
+
+                const userCard = `
+                    <div class="bg-white border border-gray-200 p-4 shadow-sm">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-black text-gray-900">${user.name}</h3>
+                            <p class="text-xs text-gray-500">Email: <span class="font-mono bg-gray-100 px-1 py-0.5 text-gray-700">${user.email}</span> | WhatsApp: ${user.whatsapp}</p>
+                        </div>
+                        ${itemsHTML}
+                    </div>
+                `;
+                container.innerHTML += userCard;
+            });
+        }
+
+        async function deleteListing(itemId) {
+            if (!confirm("Are you sure you want to remove this item from the platform?")) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`${API_BASE_URL}/items/admin/items/${itemId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    alert("Listing successfully deleted.");
+                    fetchDashboardData(); // Refresh metrics view
+                } else {
+                    const data = await response.json();
+                    alert("Error: " + data.message);
+                }
+            } catch (err) {
+                alert("Failed to reach server.");
+            }
+        }
+    </script>
+</body>
+</html>

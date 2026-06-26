@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+
 
 // Import the Master Router package
 const apiRoutes = require('./routes/index');
@@ -11,6 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require('path');
+// Expose the uploads directory publicly so your frontend can read uploaded images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Pass all API routing responsibilities down to the routes folder
 app.use('/api', apiRoutes);
 

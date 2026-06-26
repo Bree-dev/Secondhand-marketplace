@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List an Item - Second-Hand Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto mb-6 flex justify-between items-center">
+        <a href="index.html" class="text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-gray-900 transition">
+            ← Back to Marketplace
+        </a>
+        <button id="logoutBtn" class="text-xs font-bold uppercase tracking-wider text-red-500 hover:underline">
+            Logout
+        </button>
+    </div>
+
+    <div class="bg-white p-6 md:p-8 border border-gray-200 shadow-sm max-w-2xl mx-auto">
+        <h2 class="text-2xl font-extrabold text-gray-900 mb-2">List a Second-Hand Item</h2>
+        <p class="text-xs text-gray-500 mb-6">Fill in the fields below to publish your item instantly across the local network feed.</p>
+        
+        <form id="uploadForm" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Item Title</label>
+                <input type="text" id="itemTitle" required placeholder="e.g., HP EliteBook 840 G3 (8GB RAM / 256GB SSD)" 
+                       class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-gray-900">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Price (KSh)</label>
+                    <input type="number" id="itemPrice" required placeholder="e.g., 25000" 
+                           class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-gray-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Location / Town</label>
+                    <input type="text" id="itemLocation" required placeholder="e.g., Nairobi CBD, Kisumu, Mombasa" 
+                           class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-gray-900">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Category</label>
+                    <select id="itemCategory" class="w-full border border-gray-300 p-2.5 text-sm bg-white focus:outline-none focus:border-gray-900">
+                        <option value="Electronics">Electronics</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Kitchenware">Kitchenware</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Vehicles">Vehicles</option>
+                        <option value="Books & Hobbies">Books & Hobbies</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Condition</label>
+                    <select id="itemCondition" class="w-full border border-gray-300 p-2.5 text-sm bg-white focus:outline-none focus:border-gray-900">
+                        <option value="Brand New">Brand New</option>
+                        <option value="Like New">Like New</option>
+                        <option value="">Gently Used</option>
+                        <option value="SecondHand">SecondHand</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Upload Product Photo 📷</label>
+                <input type="file" id="imageFile" accept="image/*" required 
+                       class="w-full border border-gray-300 p-2 text-sm bg-white focus:outline-none focus:border-gray-900 file:mr-4 file:py-1.5 file:px-3 file:border-0 file:text-xs file:font-bold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
+                <p class="text-[10px] text-gray-400 mt-1">Select an actual photo file directly from your computer or device.</p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Detailed Description</label>
+                <textarea id="itemDescription" rows="4" required placeholder="Describe the item's current health status, defects, or specs..." 
+                          class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-gray-900"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full bg-gray-900 text-white font-bold py-3 text-xs uppercase tracking-wider hover:bg-gray-800 transition">
+                Publish Listing
+            </button>
+        </form>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/upload.js"></script>
+</body>
+</html>

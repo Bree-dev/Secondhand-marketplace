@@ -87,7 +87,7 @@ function renderDashboardGrid(items) {
         } else if (item.image_url.startsWith('http://') || item.image_url.startsWith('https://')) {
             displayImage = item.image_url;
         } else {
-            displayImage = `http://localhost:5000/${item.image_url}`;
+            displayImage = `https://secondhand-marketplace-api.onrender.com/${item.image_url}`;
         }
 
         const postDate = new Date(item.created_at).toLocaleDateString('en-KE', {
@@ -108,7 +108,7 @@ function renderDashboardGrid(items) {
                     <div class="mb-3">
                         <div class="text-lg font-extrabold text-gray-900">KSh ${parseFloat(item.price).toLocaleString()}</div>
                         <h3 class="text-xs font-bold text-gray-700 line-clamp-1">${item.title}</h3>
-                        <p class="text-[11px] text-gray-400 mt-1">📍 ${item.location} • Status: ${item.condition}</p>
+                        <p class="text-[11px] text-gray-400 mt-1"> ${item.location} • Status: ${item.condition}</p>
                     </div>
 
                     <div>

@@ -1,3 +1,5 @@
+// Global API URL Configuration
+const API_BASE_URL = 'https://secondhand-marketplace-api.onrender.com/api/v1';
 // Global tracking variables for state management
 let currentCategory = 'All';
 let searchQuery = '';
@@ -120,7 +122,7 @@ function renderGrid(itemsToDisplay) {
         } else if (item.image_url.startsWith('http://') || item.image_url.startsWith('https://')) {
             displayImage = item.image_url;
         } else {
-            displayImage = `http://localhost:5000/${item.image_url}`;
+           displayImage = `https://secondhand-marketplace-api.onrender.com/${item.image_url}`;
         }
 
         const postDate = new Date(item.created_at).toLocaleDateString('en-KE', {
@@ -251,7 +253,7 @@ function openProductModal(item) {
     } else if (item.image_url.startsWith('http://') || item.image_url.startsWith('https://')) {
         fullDisplayImage = item.image_url;
     } else {
-        fullDisplayImage = `http://localhost:5000/${item.image_url}`;
+        fullDisplayImage = `https://secondhand-marketplace-api.onrender.com/${item.image_url}`;
     }
 
     // Assign data attributes directly to modal DOM element wrappers
@@ -276,7 +278,7 @@ function openProductModal(item) {
     document.getElementById('productModal').classList.remove('hidden');
 }
 
-// 🚀 8. CLOSE DETAILED PREVIEW MODAL
+//  8. CLOSE DETAILED PREVIEW MODAL
 function closeProductModal() {
     document.getElementById('productModal').classList.add('hidden');
 }

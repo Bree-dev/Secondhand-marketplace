@@ -16,7 +16,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
     //  STEP A: Initialize FormData to construct a multipart stream instead of standard text JSON
     const formData = new FormData();
     
-    // 🚀STEP B: Append all text fields matching your specific HTML input IDs precisely
+    // STEP B: Append all text fields matching your specific HTML input IDs precisely
     formData.append('title', document.getElementById('itemTitle').value.trim());
     formData.append('price', parseFloat(document.getElementById('itemPrice').value));
     formData.append('location', document.getElementById('itemLocation').value.trim());

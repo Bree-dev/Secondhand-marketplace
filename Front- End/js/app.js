@@ -4,6 +4,7 @@ const API_BASE_URL = 'https://secondhand-marketplace-api.onrender.com/api/v1';
 let currentCategory = 'All';
 let searchQuery = '';
 
+let globalItemsArray = []; //  this  holds  items in memory
 // 1. INITIALIZE FEED ON PAGE LOAD
 document.addEventListener('DOMContentLoaded', () => {
     initializeHeaderAuthStates(); // 1.5 Evaluates JWT tokens to build dynamic navbar states
@@ -80,6 +81,7 @@ async function fetchMarketplaceItems() {
         if (!response.ok) throw new Error('Network response failure.');
         
         const items = await response.json();
+        globalItemsArray = items; // Store the fetched items in the global array for later use
         renderGrid(items);
     } catch (err) {
         console.error("Failed to load marketplace items:", err);
@@ -143,13 +145,13 @@ function renderGrid(itemsToDisplay) {
         }
 
         // Prepare raw JSON payload securely to avoid script syntax breakages inside onclick assignment
-        const itemJsonString = JSON.stringify(item).replace(/"/g, '&quot;');
+       // const itemJsonString = JSON.stringify(item).replace(/"/g, '&quot;');
 
         const cardHtml = `
             <div class="bg-white border border-gray-200 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition">
-                
-                <div onclick="openProductModal(${itemJsonString})" class="cursor-pointer group flex-grow flex flex-col">
-                    <div class="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden">
+        
+        <div onclick="openProductModalById(${item.id})" class="cursor-pointer group flex-grow flex flex-col">
+            <div class="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden">
                         <img src="${displayImage}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                     </div>
 
@@ -244,7 +246,11 @@ function filterCategory(selectedCategory) {
 }
 
 //  7. OPEN DETAILED PREVIEW MODAL LIGHTBOX
-function openProductModal(item) {
+function openProductModalById(itemId) {
+    // Find the perfect item object from our memory array using its ID
+    const item = globalItemsArray.find(i => i.id === itemId);
+    if (!item) return;
+
     const placeholders = {
         'Electronics': 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&q=80',
         'Furniture': 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=500&q=80',
@@ -261,28 +267,27 @@ function openProductModal(item) {
         fullDisplayImage = `https://secondhand-marketplace-api.onrender.com/${item.image_url}`;
     }
 
-    // Assign data attributes directly to modal DOM element wrappers
+    // Assign clean values directly to your modal components
     document.getElementById('modalImage').src = fullDisplayImage;
     document.getElementById('modalImage').alt = item.title;
     document.getElementById('modalTitle').innerText = item.title;
     document.getElementById('modalCategory').innerText = item.category;
     document.getElementById('modalPrice').innerText = `KSh ${parseFloat(item.price).toLocaleString()}`;
-    document.getElementById('modalCondition').innerText = item.condition;
+    document.getElementById('modalCondition').innerText = item.condition || "Not Specified";
     document.getElementById('modalLocation').innerText = item.location;
     document.getElementById('modalSeller').innerText = item.seller_name || 'Verified Member';
     
-    document.getElementById('modalDescription').innerText = item.description 
+    document.getElementById('modalDescription').innerText = item.description && item.description.trim() !== ""
         ? item.description 
         : "The seller did not include an additional text description for this marketplace post.";
 
-    // Configure a highly personalized WhatsApp purchase message hook
-    const message = encodeURIComponent(`Hi! I just saw your full listing for "${item.title}" priced at KSh ${item.price} on RE-MARKET. Is it still available for pick up?`);
+    // Configure WhatsApp hook
+    const message = encodeURIComponent(`Hi! I just saw your full listing for "${item.title}" priced at KSh ${item.price} on RE-MARKET. Is it still available?`);
     document.getElementById('modalWhatsAppLink').href = `https://wa.me/${item.whatsapp_number}?text=${message}`;
 
-    // Reveal the popup structural wrapper layout
+    // Reveal modal layout
     document.getElementById('productModal').classList.remove('hidden');
 }
-
 //  8. CLOSE DETAILED PREVIEW MODAL
 function closeProductModal() {
     document.getElementById('productModal').classList.add('hidden');

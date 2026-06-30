@@ -234,11 +234,16 @@ async function deleteMarketplaceItem(itemId) {
 
 // 6. ADD DYNAMIC FILTER CLICK HANDLER
 function filterCategory(selectedCategory) {
-    currentCategory = selectedCategory;
+    // Normalizes 'ALL', 'all', or 'All' to exactly 'All' so your backend conditional catches it cleanly!
+    if (selectedCategory.toUpperCase() === 'ALL') {
+        currentCategory = 'All';
+    } else {
+        currentCategory = selectedCategory;
+    }
     fetchMarketplaceItems();
 }
 
-// 🚀 7. OPEN DETAILED PREVIEW MODAL LIGHTBOX
+//  7. OPEN DETAILED PREVIEW MODAL LIGHTBOX
 function openProductModal(item) {
     const placeholders = {
         'Electronics': 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&q=80',

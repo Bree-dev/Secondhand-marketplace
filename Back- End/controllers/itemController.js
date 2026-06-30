@@ -4,22 +4,22 @@ const db = require('../config/db');
 exports.createItem = async (req, res) => {
     try {
         const sellerId = req.user.id; // Pulled from your authMiddleware token array
-        const { title, price, category, condition, location } = req.body;
+        const { title, price, category, condition, location, description } = req.body;
 
-        // 🚀 CAPTURE LOCAL FILE PATH IF UPLOADED, OTHERWISE FALLBACK TO NULL
+        //  CAPTURE THE LIVE CLOUDINARY URL DIRECTLY FROM MULTER
         let image_url = null;
         if (req.file) {
-            // This saves a clean structural identifier like "uploads/1717320000000-phone.jpg"
-            image_url = req.file.path.replace(/\\/g, '/'); 
+            // req.file.path now contains the permanent https:// secure cloud link!
+            image_url = req.file.path; 
         }
 
         const insertQuery = `
-            INSERT INTO items (title, price, category, condition, location, image_url, seller_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO items (title, price, category, condition, location, image_url, seller_id, description)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *
         `;
         
-        const values = [title, price, category, condition, location, image_url, sellerId];
+        const values = [title, price, category, condition, location, image_url, sellerId, description];
         const result = await db.query(insertQuery, values);
 
         res.status(201).json({ message: "Listing created successfully!", item: result.rows[0] });
@@ -129,7 +129,7 @@ exports.updateItem = async (req, res) => {
     try {
         const itemId = req.params.id;
         const sellerId = req.user.id;
-        const { title, price, category, condition, location, existing_image_url } = req.body;
+        const { title, price, category, condition, location, description, existing_image_url } = req.body;
 
         // 1. Verify item ownership
         const verifyResult = await db.query('SELECT * FROM items WHERE id = $1', [itemId]);
@@ -139,18 +139,19 @@ exports.updateItem = async (req, res) => {
         //  2. DETERMINE IMAGE PATH DIRECTION:
         let image_url = verifyResult.rows[0].image_url; // Default to existing database record
         if (req.file) {
-            image_url = req.file.path.replace(/\\/g, '/'); // If a fresh file is chosen, overwrite it!
+           // image_url = req.file.path.replace(/\\/g, '/'); // If a fresh file is chosen, overwrite it!
+           image_url = req.file.path; // Read the cloud URL string directly!
         } else if (existing_image_url === '') {
             image_url = null; // Cleared completely
         }
 
         const updateQuery = `
             UPDATE items 
-            SET title = $1, price = $2, category = $3, condition = $4, location = $5, image_url = $6
-            WHERE id = $7 AND seller_id = $8
+            SET title = $1, price = $2, category = $3, condition = $4, location = $5, image_url = $6, description = $7
+            WHERE id = $8 AND seller_id = $9
             RETURNING *
         `;
-        const values = [title, price, category, condition, location, image_url, itemId, sellerId];
+        const values = [title, price, category, condition, location, image_url, description, itemId, sellerId];
         const result = await db.query(updateQuery, values);
 
         res.json({ message: "Listing updated successfully!", item: result.rows[0] });

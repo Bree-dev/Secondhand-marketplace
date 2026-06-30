@@ -251,6 +251,8 @@ function openProductModalById(itemId) {
     const item = globalItemsArray.find(i => i.id === itemId);
     if (!item) return;
 
+    console.log("Database Item Properties Payload:", item);
+
     const placeholders = {
         'Electronics': 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=500&q=80',
         'Furniture': 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=500&q=80',

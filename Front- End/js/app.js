@@ -251,6 +251,8 @@ function openProductModalById(itemId) {
     const item = globalItemsArray.find(i => i.id === itemId);
     if (!item) return;
 
+    alert("Keys inside item object: " + Object.keys(item).join(", ") + "\n\nDescription Value: " + item.description);
+
     console.log("Database Item Properties Payload:", item);
 
     const placeholders = {

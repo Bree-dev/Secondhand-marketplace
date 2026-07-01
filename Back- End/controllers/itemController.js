@@ -1,10 +1,17 @@
 const db = require('../config/db');
 
+
 // 1. POST A NEW ITEM (Seller Action)
 exports.createItem = async (req, res) => {
     try {
-        const sellerId = req.user.id; // Pulled from your authMiddleware token array
-        const { title, price, category, condition, location, description } = req.body;
+        const sellerId = req.user.id; // Pulled from  authMiddleware token array
+        
+        // CHANGE: Changed 'const' to 'let' so to modify these values safely
+        let { title, price, category, condition, location, description } = req.body;
+
+        // SANITIZATION BLOCK: Force uppercase formatting and trim whitespace
+        if (condition) condition = condition.trim().toUpperCase();
+        if (description) description = description.trim();
 
         //  CAPTURE THE LIVE CLOUDINARY URL DIRECTLY FROM MULTER
         let image_url = null;

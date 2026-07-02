@@ -277,7 +277,7 @@ function openProductModalById(itemId) {
     document.getElementById('modalTitle').innerText = item.title;
     document.getElementById('modalCategory').innerText = item.category;
     document.getElementById('modalPrice').innerText = `KSh ${parseFloat(item.price).toLocaleString()}`;
-    document.getElementById('modalCondition').innerText = item.condition || "Not Specified";
+    document.getElementById('modalCondition').innerText = item.condition ||item.item_condition|| "Gently Used";
     document.getElementById('modalLocation').innerText = item.location;
     document.getElementById('modalSeller').innerText = item.seller_name || 'Verified Member';
     
